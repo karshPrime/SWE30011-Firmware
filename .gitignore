@@ -1,0 +1,14 @@
+
+# Git Ignore
+
+**/.DS_Store
+
+.vscode/
+.devcontainer/
+.cache/
+
+build/
+managed_components/
+
+sdkconfig.old
+
