@@ -32,4 +32,5 @@ class Components
 
         void Stop();
         virtual void Task() = 0;
+        virtual void Init() = 0;
 };
