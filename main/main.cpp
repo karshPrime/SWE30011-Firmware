@@ -1,7 +1,9 @@
 
 #include "ECG.h"
+#include "Motion.h"
 
 ECGSensor ECG;
+MotionSensor Motion;
 float ECGValues[ECG_SAMPLE];
 
 void TaskController( void *pvParameters )
@@ -17,6 +19,7 @@ void TaskController( void *pvParameters )
             ECGValues[i] = ECG.Values();
             vTaskDelayUntil( &lStartWakeTime, DELAY );
         }
+        xTaskNotifyGive( Motion.TaskHandler );
         vTaskDelayUntil( &lStartWakeTime, DELAY );
     }
 }
@@ -24,6 +27,9 @@ void TaskController( void *pvParameters )
 extern "C" void app_main( void )
 {
     initArduino();
+    Wire.begin( SDA_PIN, SCL_PIN, I2C_RATE );
+
+    Motion.Init();
     ECG.Init();
 
     xTaskCreatePinnedToCore( TaskController, "TaskController", 4096, NULL, 5, NULL, 1 );

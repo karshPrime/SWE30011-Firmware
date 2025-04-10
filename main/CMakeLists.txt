@@ -3,6 +3,7 @@ idf_component_register(
         "main.cpp"
         "Components.cpp"
         "ECG.cpp"
+        "Motion.cpp"
 
     INCLUDE_DIRS
         "include"
