@@ -1,9 +1,11 @@
 
+#include "BLE.h"
 #include "ECG.h"
 #include "Motion.h"
 
 ECGSensor ECG;
 MotionSensor Motion;
+BLEHandler Bluetooth;
 float ECGValues[ECG_SAMPLE];
 
 void TaskController( void *pvParameters )
@@ -21,6 +23,8 @@ void TaskController( void *pvParameters )
         }
         xTaskNotifyGive( Motion.TaskHandler );
         vTaskDelayUntil( &lStartWakeTime, DELAY );
+
+        Bluetooth.Send( Motion.Values(), ECGValues );
     }
 }
 
