@@ -1,4 +1,5 @@
 
+#include "Actions.h"
 #include "BLE.h"
 #include "ECG.h"
 #include "Motion.h"
@@ -15,6 +16,8 @@ void TaskController( void *pvParameters )
 
     for ( ;; )
     {
+        Action( Bluetooth.Receive() );
+
         for ( int i = 0; i < ECG_SAMPLE; i++ )
         {
             xTaskNotifyGive( ECG.TaskHandler );
