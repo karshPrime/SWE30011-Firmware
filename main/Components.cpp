@@ -24,8 +24,7 @@ void Components::taskWrapper( void* pvParameters )
 
 //- PUBLIC -----------------------------------------------------------------------------------------
 
-Components::Components( str aTag, const uint aStack, const uint aCore, const uint aPriority )
-    : fTag( aTag )
+void Components::ComponentStart( const uint aStack, const uint aCore, const uint aPriority )
 {
     ESP_LOGI( fTag, "Setting Task" );
 
@@ -43,10 +42,10 @@ Components::Components( str aTag, const uint aStack, const uint aCore, const uin
 Components::~Components()
 {
     ESP_LOGI( fTag, "Deconstructing Instance" );
-    Stop();
+    ComponentStop();
 }
 
-void Components::Stop()
+void Components::ComponentStop()
 {
     ESP_LOGI( fTag, "Stopping Task" );
 

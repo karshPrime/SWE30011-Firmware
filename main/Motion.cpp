@@ -1,24 +1,31 @@
 
 #include "Motion.h"
 
-void MotionSensor::Init( void )
+MotionSensor::MotionSensor( void ) : Components( "MS" )
 {
+    fValues = (MotionValues*)malloc( sizeof(MotionValues) );
+    if (!fValues) {
+        ESP_LOGE(fTag, "Failed to allocate memory for MotionValues!");
+        return;
+    }
+
     Wire.beginTransmission( MPU_ADDR );
     Wire.write( PWR_MGMT_1 );
     Wire.write( 0 );
     
-    const uint8_t STATUS = Wire.endTransmission( false );
+    const uint8_t STATUS = Wire.endTransmission( true );
     ESP_LOGI( fTag, "I2C endTransmission returned: %d", STATUS );
 
-    if ( STATUS )
-    {
-        ESP_LOGE( fTag, "I2C device not responding!" );
-    }
+    if ( STATUS ) ESP_LOGE( fTag, "I2C device not responding!" );
+
+    ComponentStart( MOTION_STACK, MOTION_CORE, MOTION_PRIORITY );
+}
+
 }
 
 void MotionSensor::Task( void )
 {
-    for ( ;; )
+    while ( true )
     {
         if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
 
@@ -46,5 +53,4 @@ void MotionSensor::Task( void )
             );
         #endif
     }
-   }
 }

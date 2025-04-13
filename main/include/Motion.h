@@ -39,16 +39,14 @@ typedef struct {
 class MotionSensor: public Components
 {
     protected:
-        MotionValues *fValues = (MotionValues*)malloc( sizeof( MotionValues ) );
+        MotionValues *fValues;
 
     public:
-        MotionSensor( void )
-            : Components( "MS", MOTION_STACK, MOTION_CORE, MOTION_PRIORITY )
-        {}
+        MotionSensor( void );
 
-        void Init( void ) override;
-        void Task( void ) override;
         MotionValues *Values( void ) const { return fValues; }
+
+        void Task( void ) override;
 };
 
 //- Debug Print ------------------------------------------------------------------------------------

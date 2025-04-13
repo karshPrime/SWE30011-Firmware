@@ -19,19 +19,16 @@
 class ECGSensor: public Components
 {
     protected:
-        float fValues;
+        uint fValues;
 
     public:
-        ECGSensor( void )
-            : Components( "ES", ECG_STACK, ECG_CORE, ECG_PRIORITY )
-        {}
+        ECGSensor( void );
 
-        void Init( void ) override;
+        uint Values( void ) const { return fValues; }
+
         void Task( void ) override;
-
-        float Values( void ) const { return fValues; }
 };
 
 //- Debug Print ------------------------------------------------------------------------------------
 
-// #define DEBUG_ECG
+#define DEBUG_ECG

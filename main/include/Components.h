@@ -8,9 +8,7 @@
 
 #include "Arduino.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/semphr.h"
 #include "freertos/task.h"
-#include "driver/gpio.h"
 #include "esp_log.h"
 
 using uint = unsigned int;
@@ -27,10 +25,11 @@ class Components
     public:
         TaskHandle_t TaskHandler = NULL;
 
-        Components( str Tag, const uint Stack, const uint Core, const uint Priority );
+        Components( str Tag ) : fTag( Tag )
+        {}
         virtual ~Components();
 
-        void Stop();
+        void ComponentStart( const uint Stack, const uint Core, const uint Priority );
+        void ComponentStop();
         virtual void Task() = 0;
-        virtual void Init() = 0;
 };
