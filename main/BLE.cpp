@@ -1,8 +1,12 @@
+
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEServer.h>
 #include "BLE.h"
 
 //- Private Methods --------------------------------------------------------------------------------
 
-string BLEHandler::dataJSON( MotionValues *aMotion, float *aECG )
+string BLEHandler::dataJSON( MotionValues *aMotion, uint *aECG )
 {
     std::ostringstream Result;
 
@@ -21,8 +25,7 @@ string BLEHandler::dataJSON( MotionValues *aMotion, float *aECG )
     for ( int i = 0; i < ECG_SAMPLE; ++i )
     {
         Result << aECG[i];
-        if ( i < (ECG_SAMPLE - 1) )
-            Result << ",";
+        if ( i < (ECG_SAMPLE - 1) ) Result << ",";
     }
 
     Result << "]}";
@@ -34,8 +37,15 @@ string BLEHandler::dataJSON( MotionValues *aMotion, float *aECG )
 
 BLEHandler::BLEHandler( void )
 {
+    //
 }
 
-void BLEHandler::Send( MotionValues *aMotion, float *aECG )
+void BLEHandler::Send( MotionValues *aMotion, uint *aECG )
 {
+    if ( fConnected )
+    {
+        //const string DATA = dataJSON( aMotion, aECG );
+
+        //
+    }
 }
