@@ -43,6 +43,7 @@ class MotionSensor: public Components
 
     public:
         MotionSensor( void );
+        ~MotionSensor( void ) override;
 
         MotionValues *Values( void ) const { return fValues; }
 

@@ -21,6 +21,13 @@ MotionSensor::MotionSensor( void ) : Components( "MS" )
     ComponentStart( MOTION_STACK, MOTION_CORE, MOTION_PRIORITY );
 }
 
+MotionSensor::~MotionSensor( void )
+{
+    ESP_LOGI( fTag, "Deconstructing Instance" );
+
+    if ( fValues ) free( fValues );
+
+    ComponentStop();
 }
 
 void MotionSensor::Task( void )
