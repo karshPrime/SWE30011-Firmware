@@ -15,6 +15,8 @@
 
 using std::string;
 
+//- Initialise system ------------------------------------------------------------------------------
+
 class BLEHandler
 {
     private:
@@ -28,5 +30,8 @@ class BLEHandler
         void Send( MotionValues*, uint* );
         string Receive( void ) const { return fValue; }
 };
+
+
+//- Debug Print ------------------------------------------------------------------------------------
 
 #define DEBUG_BLE

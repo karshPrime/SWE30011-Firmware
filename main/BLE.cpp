@@ -12,13 +12,13 @@ string BLEHandler::dataJSON( MotionValues *aMotion, uint *aECG )
 
     // Start building the JSON string
     Result << "{ \"MS\":{ "
-            << "\"AX\": " << aMotion->Accelerometer.X << ","
-            << "\"AY\": " << aMotion->Accelerometer.Y << ","
-            << "\"AZ\": " << aMotion->Accelerometer.Z << ","
-            << "\"GX\": " << aMotion->Gyro.X << ","
-            << "\"GY\": " << aMotion->Gyro.Y << ","
-            << "\"GZ\": " << aMotion->Gyro.Z << ","
-            << "\"Temperature\": " << aMotion->Temperature
+            << "\"AX\":" << aMotion->Accelerometer.X << ","
+            << "\"AY\":" << aMotion->Accelerometer.Y << ","
+            << "\"AZ\":" << aMotion->Accelerometer.Z << ","
+            << "\"GX\":" << aMotion->Gyro.X << ","
+            << "\"GY\":" << aMotion->Gyro.Y << ","
+            << "\"GZ\":" << aMotion->Gyro.Z << ","
+            << "\"Temp\":" << aMotion->Temperature
             << " }, \" ES\":[";
 
     // Add ECG values to the JSON string
@@ -44,8 +44,10 @@ void BLEHandler::Send( MotionValues *aMotion, uint *aECG )
 {
     if ( fConnected )
     {
-        //const string DATA = dataJSON( aMotion, aECG );
+        const string DATA = dataJSON( aMotion, aECG );
 
-        //
+        #ifdef DEBUG_BLE
+            ESP_LOGI( "BLE", "%s", DATA.c_str() );
+        #endif
     }
 }
