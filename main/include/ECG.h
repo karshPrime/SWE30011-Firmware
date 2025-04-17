@@ -4,10 +4,6 @@
 
 //- Configs ----------------------------------------------------------------------------------------
 
-#define LOP_PIN         45  // digital; Leads-off Detect -
-#define LON_PIN         48  // digital; Leads-off Detect -
-#define DATA_PIN        4   // analogue; Sensor Data
-
 #define ECG_CORE        1
 #define ECG_PRIORITY    1
 #define ECG_STACK       4096
@@ -31,4 +27,4 @@ class ECGSensor: public Components
 
 //- Debug Print ------------------------------------------------------------------------------------
 
-#define DEBUG_ECG
+// #define DEBUG_ECG

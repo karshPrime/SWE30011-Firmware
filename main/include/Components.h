@@ -10,6 +10,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "Pins.h"
 
 using uint = unsigned int;
 using str = const char*;
