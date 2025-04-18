@@ -1,12 +1,17 @@
 
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEServer.h>
-#include "BLE.h"
+#include "Messenger.h"
+
+
+//- Constructor ------------------------------------------------------------------------------------
+
+Messenger::Messenger( const uint BaudRate )
+{
+    Serial.begin( BaudRate );
+}
 
 //- Private Methods --------------------------------------------------------------------------------
 
-string BLEHandler::dataJSON( MotionValues *aMotion, uint *aECG )
+string Messenger::dataJSON( MotionValues *aMotion, uint *aECG )
 {
     std::ostringstream Result;
 
@@ -35,19 +40,19 @@ string BLEHandler::dataJSON( MotionValues *aMotion, uint *aECG )
 
 //- Public Methods ---------------------------------------------------------------------------------
 
-BLEHandler::BLEHandler( void )
+void Messenger::Dispatch( MotionValues *aMotion, uint *aECG )
 {
-    //
+    const string DATA_RAW = dataJSON( aMotion, aECG );
+    const str DATA = DATA_RAW.c_str();
+
+    Serial.println( DATA );
+
+    #ifdef DEBUG_MESSENGER
+        ESP_LOGI( "BLE", "%s", DATA );
+    #endif
 }
 
-void BLEHandler::Send( MotionValues *aMotion, uint *aECG )
+string Messenger::Retrieve( void )
 {
-    if ( fConnected )
-    {
-        const string DATA = dataJSON( aMotion, aECG );
-
-        #ifdef DEBUG_BLE
-            ESP_LOGI( "BLE", "%s", DATA.c_str() );
-        #endif
-    }
+    return fValue;
 }

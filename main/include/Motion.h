@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include "Wire.h"
-#include "Components.h"
+#include "Ground.h"
 
 //- Configs ----------------------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ typedef struct {
 } MotionValues;
 
 
-class MotionSensor: public Components
+class MotionSensor: public Ground
 {
     protected:
         MotionValues *fValues;

@@ -15,7 +15,7 @@
 using uint = unsigned int;
 using str = const char*;
 
-class Components
+class Ground
 {
     private:
         static void taskWrapper( void *pvParameters );
@@ -26,11 +26,10 @@ class Components
     public:
         TaskHandle_t TaskHandler = NULL;
 
-        Components( str Tag ) : fTag( Tag )
-        {}
-        virtual ~Components();
+        Ground( str Tag ) : fTag( Tag ) {}
+        virtual ~Ground( void );
 
-        void ComponentStart( const uint Stack, const uint Core, const uint Priority );
-        void ComponentStop();
-        virtual void Task() = 0;
+        void GroundSetup( const uint Stack, const uint Core, const uint Priority );
+        void GroundStop( void );
+        virtual void Task( void ) = 0;
 };

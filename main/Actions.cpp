@@ -1,8 +1,11 @@
 
 #include "Actions.h"
+#include "Pins.h"
 #include "Adafruit_NeoPixel.h"
 
 Adafruit_NeoPixel Strip( 1, 48, NEO_GRB + NEO_KHZ800 );
+
+//- Private Methods --------------------------------------------------------------------------------
 
 void toggleOnBoardRGB()
 {
@@ -28,6 +31,8 @@ void toggleOnBoardRGB()
     }
 }
 
+
+//- Public Methods ---------------------------------------------------------------------------------
 
 void Action( std::string aData )
 {

@@ -1,7 +1,7 @@
 
 #include "Motion.h"
 
-MotionSensor::MotionSensor( void ) : Components( "MS" )
+MotionSensor::MotionSensor( void ) : Ground( "MS" )
 {
     fValues = (MotionValues*)malloc( sizeof(MotionValues) );
     if (!fValues) {
@@ -18,7 +18,7 @@ MotionSensor::MotionSensor( void ) : Components( "MS" )
 
     if ( STATUS ) ESP_LOGE( fTag, "I2C device not responding!" );
 
-    ComponentStart( MOTION_STACK, MOTION_CORE, MOTION_PRIORITY );
+    GroundSetup( MOTION_STACK, MOTION_CORE, MOTION_PRIORITY );
 }
 
 MotionSensor::~MotionSensor( void )
@@ -27,7 +27,7 @@ MotionSensor::~MotionSensor( void )
 
     if ( fValues ) free( fValues );
 
-    ComponentStop();
+    GroundStop();
 }
 
 void MotionSensor::Task( void )

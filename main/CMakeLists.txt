@@ -1,9 +1,9 @@
 idf_component_register(
     SRCS
         "main.cpp"
+        "Ground.cpp"
         "Actions.cpp"
-        "BLE.cpp"
-        "Components.cpp"
+        "Messenger.cpp"
         "ECG.cpp"
         "Motion.cpp"
 

@@ -1,6 +1,6 @@
 
 #pragma once
-#include "Components.h"
+#include "Ground.h"
 
 //- Configs ----------------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@
 
 //- Initialise system ------------------------------------------------------------------------------
 
-class ECGSensor: public Components
+class ECGSensor: public Ground
 {
     protected:
         uint fValues;

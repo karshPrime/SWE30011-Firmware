@@ -4,17 +4,17 @@
  * Provides utilities for task creation, execution, and termination.
  */
 
-#include "components.h"
+#include "Ground.h"
 
 //- PRIVATE ----------------------------------------------------------------------------------------
 
-void Components::taskWrapper( void* pvParameters )
+void Ground::taskWrapper( void* pvParameters )
 {
-    Components *lInstance = static_cast<Components*>( pvParameters );
+    Ground *lInstance = static_cast<Ground*>( pvParameters );
 
     if ( !lInstance )
     {
-        ESP_LOGE( "Components", "TaskWrapper received null instance!" );
+        ESP_LOGE( "Ground", "TaskWrapper received null instance!" );
         vTaskDelete( NULL );
     }
 
@@ -24,7 +24,7 @@ void Components::taskWrapper( void* pvParameters )
 
 //- PUBLIC -----------------------------------------------------------------------------------------
 
-void Components::ComponentStart( const uint aStack, const uint aCore, const uint aPriority )
+void Ground::GroundSetup( const uint aStack, const uint aCore, const uint aPriority )
 {
     ESP_LOGI( fTag, "Setting Task" );
 
@@ -39,13 +39,14 @@ void Components::ComponentStart( const uint aStack, const uint aCore, const uint
     ESP_LOGI( fTag, "Setting Task Successful" );
 }
 
-Components::~Components()
+Ground::~Ground()
 {
     ESP_LOGI( fTag, "Deconstructing Instance" );
-    ComponentStop();
+
+    GroundStop();
 }
 
-void Components::ComponentStop()
+void Ground::GroundStop()
 {
     ESP_LOGI( fTag, "Stopping Task" );
 

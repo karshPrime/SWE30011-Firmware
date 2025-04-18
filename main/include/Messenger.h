@@ -12,7 +12,7 @@ using std::string;
 
 //- Initialise system ------------------------------------------------------------------------------
 
-class BLEHandler
+class Messenger
 {
     private:
         string fValue;
@@ -21,11 +21,11 @@ class BLEHandler
         string dataJSON( MotionValues*, uint* );
 
     public:
-        BLEHandler( void );
-        void Send( MotionValues*, uint* );
-        string Receive( void ) const { return fValue; }
-};
+        Messenger( const uint BaudRate );
 
+        void Dispatch( MotionValues*, uint* );
+        string Retrieve( void );
+};
 
 //- Debug Print ------------------------------------------------------------------------------------
 

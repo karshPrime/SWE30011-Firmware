@@ -1,17 +1,17 @@
 
 #include "Actions.h"
-#include "BLE.h"
 #include "ECG.h"
 #include "Motion.h"
+#include "Messenger.h"
 
 extern "C" void app_main( void )
 {
     initArduino();
     Wire.begin( SDA_PIN, SCL_PIN, I2C_RATE );
 
-    ECGSensor ECG;
+    Messenger    Connection( 9600 );
+    ECGSensor    ECG;
     MotionSensor Motion;
-    BLEHandler Bluetooth;
 
     uint lECGValues[ECG_SAMPLE];
 
@@ -20,7 +20,7 @@ extern "C" void app_main( void )
 
     while ( true )
     {
-        Action( Bluetooth.Receive() );
+        Action( Connection.Retrieve() );
 
         for ( int i = 0; i < ECG_SAMPLE; i++ )
         {
@@ -32,6 +32,6 @@ extern "C" void app_main( void )
         xTaskNotifyGive( Motion.TaskHandler );
         vTaskDelayUntil( &lStartWakeTime, DELAY );
 
-        Bluetooth.Send( Motion.Values(), lECGValues );
+        Connection.Dispatch( Motion.Values(), lECGValues );
     }
 }

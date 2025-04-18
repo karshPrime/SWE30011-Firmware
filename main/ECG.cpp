@@ -1,12 +1,12 @@
 
 #include "ECG.h"
 
-ECGSensor::ECGSensor( void ) : Components( "ES" )
+ECGSensor::ECGSensor( void ) : Ground( "ES" )
 {
     pinMode( LOP_PIN, INPUT );
     pinMode( LON_PIN, INPUT );
 
-    ComponentStart( ECG_STACK, ECG_CORE, ECG_PRIORITY );
+    GroundSetup( ECG_STACK, ECG_CORE, ECG_PRIORITY );
 }
 
 void ECGSensor::Task( void )
