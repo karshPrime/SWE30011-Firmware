@@ -100,18 +100,20 @@ void Actions::Task( void )
     while ( true )
     {
         if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
+
         beep( BEEP );
         beep( BEEP_FAST );
         beep( BEEP_SLOW );
+        delay( 200 );
 
-        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
         beep( BEEP_FAST );
+        delay( 200 );
 
-        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
         beep( BEEP );
         beep( BEEP_FAST );
+        delay( 200 );
 
-        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
         beep( BEEP_FAST );
+        delay( 200 );
     }
 }
