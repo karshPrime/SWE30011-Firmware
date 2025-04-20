@@ -33,7 +33,7 @@ typedef struct {
 
 class MotionSensor: public Ground
 {
-    protected:
+    private:
         MotionValues *fValues;
 
     public:

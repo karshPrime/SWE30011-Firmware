@@ -9,7 +9,7 @@ extern "C" void app_main( void )
     initArduino();
     Wire.begin( SDA_PIN, SCL_PIN, I2C_RATE );
 
-    Messenger    Connection( 9600 );
+    Messenger    Connection;
     ECGSensor    ECG;
     MotionSensor Motion;
 

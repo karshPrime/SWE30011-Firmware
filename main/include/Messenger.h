@@ -10,6 +10,11 @@
 
 using std::string;
 
+//- Configs ----------------------------------------------------------------------------------------
+
+#define BAUD_RATE 9600
+
+
 //- Initialise system ------------------------------------------------------------------------------
 
 class Messenger
@@ -21,7 +26,7 @@ class Messenger
         string dataJSON( MotionValues*, uint* );
 
     public:
-        Messenger( const uint BaudRate );
+        Messenger( void ) { Serial.begin( BAUD_RATE ); }
 
         void Dispatch( MotionValues*, uint* );
         string Retrieve( void );

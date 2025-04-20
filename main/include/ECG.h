@@ -14,7 +14,7 @@
 
 class ECGSensor: public Ground
 {
-    protected:
+    private:
         uint fValues;
 
     public:

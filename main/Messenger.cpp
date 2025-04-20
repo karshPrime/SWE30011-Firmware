@@ -1,14 +1,6 @@
 
 #include "Messenger.h"
 
-
-//- Constructor ------------------------------------------------------------------------------------
-
-Messenger::Messenger( const uint BaudRate )
-{
-    Serial.begin( BaudRate );
-}
-
 //- Private Methods --------------------------------------------------------------------------------
 
 string Messenger::dataJSON( MotionValues *aMotion, uint *aECG )
