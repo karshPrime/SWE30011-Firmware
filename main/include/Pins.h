@@ -3,6 +3,7 @@
 
 //- GPIO Pins --------------------------------------------------------------------------------------
 
+#define FAN_PIN         10
 #define BUZZER_PIN      8
 #define BLUE_LED_PIN    15
 

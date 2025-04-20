@@ -1,82 +1,117 @@
 
-#include <iostream>
 #include "Actions.h"
-#include "Pins.h"
-#include "Adafruit_NeoPixel.h"
+
+//- Constructor ------------------------------------------------------------------------------------
 
 // Keys here should match the edge server JSON generator method's keys
-Actuator ActuatorsList[] = {
-    { .Pin = 10, .Key = "fan",    .Status = STOP, .State = false }, 
-    { .Pin = 12, .Key = "buzzer", .Status = STOP, .State = false }, 
-    { .Pin = 13, .Key = "ledRed", .Status = STOP, .State = false }, 
-    { .Pin = 13, .Key = "ledRGB", .Status = STOP, .State = false }, 
-};
-#define ACTUATORS_COUNT 4
-#define ACTUATOR_I ( &ActuatorsList[0] + i )
+Actions::Actions( void ) :
+    Ground( "AC" ),
+    fCount( 3 ),
+    fRGBStrip( 1, 48, NEO_GRB + NEO_KHZ800 )
+{
+    fRGBStrip.begin();
+    fRGBStrip.show();
 
-Adafruit_NeoPixel Strip( 1, 48, NEO_GRB + NEO_KHZ800 );
+    pinMode( FAN_PIN, OUTPUT );
+    pinMode( BUZZER_PIN, OUTPUT );
+    pinMode( BLUE_LED_PIN, OUTPUT );
+
+    fActuators = new Actuator[fCount];
+    fActuators[0] = { FAN_PIN, "fan", STOP, false };
+    fActuators[1] = { BUZZER_PIN, "buzzer", STOP, false };
+    fActuators[2] = { BLUE_LED_PIN, "ledRed", STOP, false };
+
+    GroundSetup( ACTION_STACK, ACTION_CORE, ACTION_PRIORITY );
+}
+
+Actions::~Actions( void )
+{
+    ESP_LOGI( fTag, "Deconstructing Instance" );
+
+    delete[] fActuators;
+
+    GroundStop();
+}
+
 
 //- Private Methods --------------------------------------------------------------------------------
 
-void toggleOnBoardRGB( void )
+void Actions::heartRate( uint aAverageRate )
 {
-    Strip.begin();
-    Strip.show(); // Initialize all pixels to 'off'
+    if ( aAverageRate == 0 )
+        fRGBStrip.setPixelColor(0, fRGBStrip.Color(255, 0, 0)); // Red
+    else if ( aAverageRate > 1000 )
+        fRGBStrip.setPixelColor(0, fRGBStrip.Color(0, 255, 0)); // Green
+    else
+        fRGBStrip.setPixelColor(0, fRGBStrip.Color(0, 0, 255)); // Blue
 
-    while (1)
+    fRGBStrip.show();
+}
+
+void Actions::beep( AStatus aSpeed )
+{
+    for ( size_t i = 0; i < fCount; ++i )
     {
-        // Red
-        Strip.setPixelColor(0, Strip.Color(255, 0, 0));
-        Strip.show();
-        delay(1000);
+        if ( fActuators[i].Status == aSpeed )
+        {
+            fActuators[i].State = !fActuators[i].State;
 
-        // Green
-        Strip.setPixelColor(0, Strip.Color(0, 255, 0));
-        Strip.show();
-        delay(1000);
-
-        // Blue
-        Strip.setPixelColor(0, Strip.Color(0, 0, 255));
-        Strip.show();
-        delay(1000);
+            digitalWrite( fActuators[i].Pin, fActuators[i].State );
+        }
     }
+}
+
+uint Actions::readJSON( const string &aJSON, const string &aKey )
+{
+    const string lSearchKey = "\"" + aKey + "\":";
+    const size_t lPosition = aJSON.find( lSearchKey );
+
+    if ( lPosition != string::npos )
+    {
+        const size_t lStartIndex = aJSON.find( ':', lPosition ) + 1;
+        size_t lEndIndex = aJSON.find( ',', lStartIndex );
+
+        if ( lEndIndex == string::npos )
+            lEndIndex = aJSON.find( '}', lStartIndex );
+
+        return std::stoi( aJSON.substr( lStartIndex, lEndIndex - lStartIndex ));
+    }
+    return 2; // Return UNCHANGED (enum val 2) if the key is not found
 }
 
 
 //- Public Methods ---------------------------------------------------------------------------------
 
-void ActionUpdate( string aData )
+void Actions::Parse( string aData )
 {
-    for ( size_t i = 0; i < ACTUATORS_COUNT; ++i )
+    heartRate( readJSON( aData, "AHR" ) );
+
+    for ( size_t i = 0; i < fCount; ++i )
     {
-        const string lSearchKey = string( "\"" ) + ACTUATOR_I->Key + "\":";
-        const size_t lPosition = aJSON.find( lSearchKey );
+        const int lValue = readJSON( aData, fActuators[i].Key );
 
-        if ( lPosition != string::npos )
-        {
-            const size_t lStartIndex = aJSON.find( ':', lPosition ) + 1;
-            size_t lEndIndex = aJSON.find( ',', lStartIndex );
-
-            if ( lEndIndex == string::npos )
-                lEndIndex = aJSON.find( '}', lStartIndex );
-
-            const int lValue = std::stoi( aJSON.substr( lStartIndex, lEndIndex - lStartIndex ));
-
-            if ( lValue != UNCHANGED )
-                ACTUATOR_I->Status = lValue;
-        }
+        if ( lValue != UNCHANGED )
+            fActuators[i].Status = static_cast<AStatus>(lValue);
     }
 }
 
-void ActionBeep( ActionPace aPace )
+void Actions::Task( void )
 {
-    for ( size_t i = 0; i < ACTUATORS_COUNT; ++i )
+    while ( true )
     {
-        if ( ACTUATOR_I->Status == aPace )
-        {
-            ACTUATOR_I->State != ACTUATOR_I->State;
+        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
+        beep( BEEP );
+        beep( BEEP_FAST );
+        beep( BEEP_SLOW );
 
-            digitalWrite( ACTUATOR_I->Pin, ACTUATOR_I->State );
-        }
+        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
+        beep( BEEP_FAST );
+
+        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
+        beep( BEEP );
+        beep( BEEP_FAST );
+
+        if( ulTaskNotifyTake( pdTRUE, portMAX_DELAY ) != pdPASS ) { continue; }
+        beep( BEEP_FAST );
     }
 }
