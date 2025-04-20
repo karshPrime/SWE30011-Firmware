@@ -5,7 +5,7 @@
 //- Configs ----------------------------------------------------------------------------------------
 
 #define ECG_CORE        1
-#define ECG_PRIORITY    1
+#define ECG_PRIORITY    2
 #define ECG_STACK       4096
 
 #define ECG_SAMPLE      256

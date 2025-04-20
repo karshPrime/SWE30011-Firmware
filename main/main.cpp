@@ -7,7 +7,7 @@
 extern "C" void app_main( void )
 {
     initArduino();
-    Wire.begin( SDA_PIN, SCL_PIN, I2C_RATE );
+    Wire.begin( SDA_PIN, SCL_PIN );
 
     ECGSensor    ECG;
     MotionSensor Motion;
