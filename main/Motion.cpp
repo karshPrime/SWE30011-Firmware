@@ -1,6 +1,8 @@
 
 #include "Motion.h"
 
+//- Constructor ------------------------------------------------------------------------------------
+
 MotionSensor::MotionSensor( void ) : Ground( "MS" )
 {
     fValues = (MotionValues*)malloc( sizeof(MotionValues) );
@@ -29,6 +31,9 @@ MotionSensor::~MotionSensor( void )
 
     GroundStop();
 }
+
+
+//- Task Override ----------------------------------------------------------------------------------
 
 void MotionSensor::Task( void )
 {

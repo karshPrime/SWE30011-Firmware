@@ -26,7 +26,3 @@ class Messenger
         void Dispatch( MotionValues*, uint* );
         string Retrieve( void );
 };
-
-//- Debug Print ------------------------------------------------------------------------------------
-
-#define DEBUG_BLE

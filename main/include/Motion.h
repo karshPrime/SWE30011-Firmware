@@ -44,7 +44,3 @@ class MotionSensor: public Ground
 
         void Task( void ) override;
 };
-
-//- Debug Print ------------------------------------------------------------------------------------
-
-#define DEBUG_MOTION

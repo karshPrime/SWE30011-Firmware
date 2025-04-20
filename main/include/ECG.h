@@ -24,7 +24,3 @@ class ECGSensor: public Ground
 
         void Task( void ) override;
 };
-
-//- Debug Print ------------------------------------------------------------------------------------
-
-// #define DEBUG_ECG

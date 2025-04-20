@@ -1,6 +1,7 @@
 
 #pragma once
 
+//- GPIO Pins --------------------------------------------------------------------------------------
 
 #define BUZZER_PIN      8
 #define BLUE_LED_PIN    15
@@ -13,3 +14,10 @@
 #define SCL_PIN         12
 #define I2C_RATE        400000
 
+
+//- Debug Print ------------------------------------------------------------------------------------
+
+// #define DEBUG_ECG
+// #define DEBUG_MOTION
+// #define DEBUG_ACTIONS
+// #define DEBUG_MESSENGER

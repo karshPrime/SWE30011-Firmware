@@ -1,6 +1,8 @@
 
 #include "ECG.h"
 
+//- Constructor ------------------------------------------------------------------------------------
+
 ECGSensor::ECGSensor( void ) : Ground( "ES" )
 {
     pinMode( LOP_PIN, INPUT );
@@ -8,6 +10,8 @@ ECGSensor::ECGSensor( void ) : Ground( "ES" )
 
     GroundSetup( ECG_STACK, ECG_CORE, ECG_PRIORITY );
 }
+
+//- Task Override ----------------------------------------------------------------------------------
 
 void ECGSensor::Task( void )
 {
