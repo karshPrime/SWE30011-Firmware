@@ -11,6 +11,7 @@
 #define ACTION_PRIORITY 1
 #define ACTION_STACK    4096
 
+
 //- Typedefs ---------------------------------------------------------------------------------------
 
 using std::string;
@@ -23,6 +24,7 @@ typedef struct {
     AStatus Status;
     bool    State;
 } Actuator;
+
 
 //- Public Methods ---------------------------------------------------------------------------------
 

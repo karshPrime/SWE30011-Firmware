@@ -6,7 +6,7 @@
 Messenger::Messenger( void ) : Ground( "MG" )
 {
     Serial.begin( BAUD_RATE );
-    fMessage = "{ \"average\": 10, \"fan\": 0, \"buzzer\": 0, \"ledRed\": 0 }";
+    fMessage = "{ \"AHR\": 10, \"FAN\": 0, \"BUZ\": 0, \"LRED\": 0 }";
 
     GroundSetup( MESSENGER_STACK, MESSENGER_CORE, MESSENGER_PRIORITY );
 }
@@ -75,6 +75,10 @@ void Messenger::Task( void )
             else
             {
                 lInputBuffer += lSingleChar;
+
+                #ifdef DEBUG_MESSENGER
+                    ESP_LOGI( fTag, "%c", lSingleChar );
+                #endif
             }
         }
 

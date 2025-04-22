@@ -17,9 +17,9 @@ Actions::Actions( void ) :
     pinMode( BLUE_LED_PIN, OUTPUT );
 
     fActuators = new Actuator[fCount];
-    fActuators[0] = { FAN_PIN, "fan", STOP, false };
-    fActuators[1] = { BUZZER_PIN, "buzzer", STOP, false };
-    fActuators[2] = { BLUE_LED_PIN, "ledRed", STOP, false };
+    fActuators[0] = { FAN_PIN, "FAN", STOP, false };
+    fActuators[1] = { BUZZER_PIN, "BUZ", STOP, false };
+    fActuators[2] = { BLUE_LED_PIN, "LRED", STOP, false };
 
     GroundSetup( ACTION_STACK, ACTION_CORE, ACTION_PRIORITY );
 }
@@ -38,12 +38,12 @@ Actions::~Actions( void )
 
 void Actions::heartRate( uint aAverageRate )
 {
-    if ( aAverageRate == 0 )
-        fRGBStrip.setPixelColor(0, fRGBStrip.Color(255, 0, 0)); // Red
-    else if ( aAverageRate > 1000 )
-        fRGBStrip.setPixelColor(0, fRGBStrip.Color(0, 255, 0)); // Green
+    if ( aAverageRate == 10 )
+        fRGBStrip.setPixelColor( 0, fRGBStrip.Color(255, 0, 0) ); // Red
+    else if ( aAverageRate == 20 )
+        fRGBStrip.setPixelColor( 0, fRGBStrip.Color(0, 255, 0) ); // Green
     else
-        fRGBStrip.setPixelColor(0, fRGBStrip.Color(0, 0, 255)); // Blue
+        fRGBStrip.setPixelColor( 0, fRGBStrip.Color(0, 0, 255) ); // Blue
 
     fRGBStrip.show();
 }
@@ -57,6 +57,11 @@ void Actions::beep( AStatus aSpeed )
             fActuators[i].State = !fActuators[i].State;
 
             digitalWrite( fActuators[i].Pin, fActuators[i].State );
+
+            #ifdef DEBUG_ACTIONS
+                ESP_LOGI( fTag, "Beeping %s to %d",
+                    fActuators[i].Key.c_str(), static_cast<int>(fActuators[i].State) );
+            #endif
         }
     }
 }
@@ -74,7 +79,13 @@ uint Actions::readJSON( const string &aJSON, const string &aKey )
         if ( lEndIndex == string::npos )
             lEndIndex = aJSON.find( '}', lStartIndex );
 
-        return std::stoi( aJSON.substr( lStartIndex, lEndIndex - lStartIndex ));
+        const uint Result = std::stoi( aJSON.substr( lStartIndex, lEndIndex - lStartIndex ));
+
+    #ifdef DEBUG_ACTIONS
+        ESP_LOGI( "Parsed", "%s as %d", aJSON.c_str(), Result );
+    #endif
+
+        return Result;
     }
     return 2; // Return UNCHANGED (enum val 2) if the key is not found
 }
@@ -91,7 +102,14 @@ void Actions::Parse( string aData )
         const int lValue = readJSON( aData, fActuators[i].Key );
 
         if ( lValue != UNCHANGED )
-            fActuators[i].Status = static_cast<AStatus>(lValue);
+        {
+            fActuators[i].Status = static_cast<AStatus>(lValue); // for the different beeps
+
+            if ( lValue < UNCHANGED ) // either STOP/START
+            {
+                digitalWrite( fActuators[i].Pin, lValue );
+            }
+        }
     }
 }
 

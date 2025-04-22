@@ -16,7 +16,7 @@
 #define MOTION_STACK    4096
 
 
-//- Initialise system ------------------------------------------------------------------------------
+//- Typedefs ---------------------------------------------------------------------------------------
 
 typedef struct {
     struct {
@@ -30,6 +30,8 @@ typedef struct {
     int16_t Temperature;
 } MotionValues;
 
+
+//- Initialise system ------------------------------------------------------------------------------
 
 class MotionSensor: public Ground
 {
