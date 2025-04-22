@@ -1,6 +1,17 @@
 
 #include "Messenger.h"
 
+//- Constructor ------------------------------------------------------------------------------------
+
+Messenger::Messenger( void ) : Ground( "MG" )
+{
+    Serial.begin( BAUD_RATE );
+    fMessage = "{ \"average\": 10, \"fan\": 0, \"buzzer\": 0, \"ledRed\": 0 }";
+
+    GroundSetup( MESSENGER_STACK, MESSENGER_CORE, MESSENGER_PRIORITY );
+}
+
+
 //- Private Methods --------------------------------------------------------------------------------
 
 string Messenger::dataJSON( MotionValues *aMotion, uint *aECG )
@@ -30,6 +41,7 @@ string Messenger::dataJSON( MotionValues *aMotion, uint *aECG )
     return Result.str();
 }
 
+
 //- Public Methods ---------------------------------------------------------------------------------
 
 void Messenger::Dispatch( MotionValues *aMotion, uint *aECG )
@@ -40,11 +52,32 @@ void Messenger::Dispatch( MotionValues *aMotion, uint *aECG )
     Serial.println( DATA );
 
     #ifdef DEBUG_MESSENGER
-        ESP_LOGI( "BLE", "%s", DATA );
+        ESP_LOGI( fTag, "%s", DATA );
     #endif
 }
 
-string Messenger::Retrieve( void )
+void Messenger::Task( void )
 {
-    return fValue;
+    string lInputBuffer;
+
+    while ( true )
+    {
+        while ( Serial.available() > 0 )
+        {
+            char lSingleChar = ( char )Serial.read();
+            if ( lSingleChar == '\n' )
+            {
+                fMessage = lInputBuffer;
+                lInputBuffer.clear();
+
+                Serial.println( fMessage.c_str() );
+            }
+            else
+            {
+                lInputBuffer += lSingleChar;
+            }
+        }
+
+        vTaskDelay( 10 / portTICK_PERIOD_MS );
+    }
 }
