@@ -27,7 +27,7 @@ string Messenger::dataJSON( MotionValues *aMotion, uint *aECG )
             << "\"GY\":" << aMotion->Gyro.Y << ","
             << "\"GZ\":" << aMotion->Gyro.Z << ","
             << "\"Temp\":" << aMotion->Temperature
-            << " }, \" ES\":[";
+            << " }, \"ES\":[";
 
     // Add ECG values to the JSON string
     for ( int i = 0; i < ECG_SAMPLE; ++i )

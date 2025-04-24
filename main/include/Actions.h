@@ -26,7 +26,7 @@ typedef struct {
 } Actuator;
 
 
-//- Public Methods ---------------------------------------------------------------------------------
+//- Initialise system ------------------------------------------------------------------------------
 
 class Actions: public Ground {
     private:

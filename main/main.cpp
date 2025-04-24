@@ -15,13 +15,11 @@ extern "C" void app_main( void )
     Messenger    Connection;
 
     uint lECGValues[ECG_SAMPLE];
+    TickType_t lWakeTime = xTaskGetTickCount();
 
     while ( true )
     {
-        Action.Parse( Connection.Retrieve() );
-
-        xTaskNotifyGive( Action.TaskHandler );
-
+        // Gather data ---------------------------------------
         for ( int i = 0; i < ECG_SAMPLE; i++ )
         {
             xTaskNotifyGive( ECG.TaskHandler );
@@ -31,6 +29,16 @@ extern "C" void app_main( void )
 
         xTaskNotifyGive( Motion.TaskHandler );
 
+
+        // Transmit data -------------------------------------
+        xTaskDelayUntil( &lWakeTime, pdMS_TO_TICKS(1000) );
+
         Connection.Dispatch( Motion.Values(), lECGValues );
+        Action.Parse( Connection.Retrieve() );
+
+        lWakeTime = xTaskGetTickCount();
+
+        // Act upon the data ---------------------------------
+        xTaskNotifyGive( Action.TaskHandler );
     }
 }
