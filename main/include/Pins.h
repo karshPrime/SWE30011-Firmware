@@ -3,16 +3,18 @@
 
 //- GPIO Pins --------------------------------------------------------------------------------------
 
-#define FAN_PIN         10
 #define BUZZER_PIN      8
-#define BLUE_LED_PIN    15
+#define LED_RIGHT_PIN   45
+#define LED_LEFT_PIN    11
+#define LED_UP_PIN      21
+#define LED_DOWN_PIN    39
 
 #define LON_PIN         35  // digital; Leads-off Detect -
 #define LOP_PIN         36  // digital; Leads-off Detect -
 #define DATA_PIN        4   // analogue; Sensor Data
 
-#define SDA_PIN         11
-#define SCL_PIN         12
+#define SDA_PIN         5
+#define SCL_PIN         6
 
 
 //- Debug Print ------------------------------------------------------------------------------------

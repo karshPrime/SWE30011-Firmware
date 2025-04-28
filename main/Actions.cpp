@@ -6,20 +6,24 @@
 // Keys here should match the edge server JSON generator method's keys
 Actions::Actions( void ) :
     Ground( "AC" ),
-    fCount( 3 ),
+    fCount( 5 ),
     fRGBStrip( 1, 48, NEO_GRB + NEO_KHZ800 )
 {
     fRGBStrip.begin();
     fRGBStrip.show();
 
-    pinMode( FAN_PIN, OUTPUT );
     pinMode( BUZZER_PIN, OUTPUT );
-    pinMode( BLUE_LED_PIN, OUTPUT );
+    pinMode( LED_RIGHT_PIN, OUTPUT );
+    pinMode( LED_LEFT_PIN, OUTPUT );
+    pinMode( LED_UP_PIN, OUTPUT );
+    pinMode( LED_DOWN_PIN, OUTPUT );
 
     fActuators = new Actuator[fCount];
-    fActuators[0] = { FAN_PIN, "FAN", STOP, false };
-    fActuators[1] = { BUZZER_PIN, "BUZ", STOP, false };
-    fActuators[2] = { BLUE_LED_PIN, "LRED", STOP, false };
+    fActuators[0] = { BUZZER_PIN   , "BUZ",  STOP, false };
+    fActuators[1] = { LED_RIGHT_PIN, "LEDR", STOP, false };
+    fActuators[2] = { LED_LEFT_PIN , "LEDL", STOP, false };
+    fActuators[3] = { LED_UP_PIN   , "LEDU", STOP, false };
+    fActuators[4] = { LED_DOWN_PIN , "LEDD", STOP, false };
 
     GroundSetup( ACTION_STACK, ACTION_CORE, ACTION_PRIORITY );
 }
