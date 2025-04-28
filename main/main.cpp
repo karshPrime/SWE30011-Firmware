@@ -14,31 +14,25 @@ extern "C" void app_main( void )
     Actions      Action;
     Messenger    Connection;
 
-    uint lECGValues[ECG_SAMPLE];
-    TickType_t lWakeTime = xTaskGetTickCount();
-
     while ( true )
     {
-        // Gather data ---------------------------------------
+        // Gather & Dispatch Sensor Data ---------------------
+
+        xTaskNotifyGive( Motion.TaskHandler );
+        Connection.DispatchMS( Motion.Values() );
+
         for ( int i = 0; i < ECG_SAMPLE; i++ )
         {
             xTaskNotifyGive( ECG.TaskHandler );
-            lECGValues[i] = ECG.Values();
+            Connection.DispatchES( ECG.Values() );
             delay(1);
         }
+        Connection.DispatchTail();
 
-        xTaskNotifyGive( Motion.TaskHandler );
 
+        // Recieve Actuator Action & Trigger them ------------
 
-        // Transmit data -------------------------------------
-        xTaskDelayUntil( &lWakeTime, pdMS_TO_TICKS(1000) );
-
-        Connection.Dispatch( Motion.Values(), lECGValues );
         Action.Parse( Connection.Retrieve() );
-
-        lWakeTime = xTaskGetTickCount();
-
-        // Act upon the data ---------------------------------
         xTaskNotifyGive( Action.TaskHandler );
     }
 }

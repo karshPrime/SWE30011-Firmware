@@ -87,7 +87,8 @@ uint Actions::readJSON( const string &aJSON, const string &aKey )
 
         return Result;
     }
-    return 2; // Return UNCHANGED (enum val 2) if the key is not found
+
+    return UNCHANGED; // Return UNCHANGED if the key is not found
 }
 
 

@@ -7,7 +7,6 @@
 
 #include "Ground.h"
 #include "Motion.h"
-#include "ECG.h"
 
 using std::string;
 
@@ -19,21 +18,22 @@ using std::string;
 #define MESSENGER_PRIORITY    2
 #define MESSENGER_STACK       4096
 
+
 //- Initialise system ------------------------------------------------------------------------------
 
 class Messenger : Ground
 {
     private:
         string fMessage;
-        bool fConnected = false;
-
-        string dataJSON( MotionValues*, uint* );
 
     public:
         Messenger( void );
 
         string Retrieve( void ) const { return fMessage; }
 
-        void Dispatch( MotionValues*, uint* );
+        void DispatchMS( MotionValues* );
+        void DispatchES( uint );
+        void DispatchTail( void );
+
         void Task( void ) override;
 };

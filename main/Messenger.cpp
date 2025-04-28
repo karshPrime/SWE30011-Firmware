@@ -12,49 +12,38 @@ Messenger::Messenger( void ) : Ground( "MG" )
 }
 
 
-//- Private Methods --------------------------------------------------------------------------------
-
-string Messenger::dataJSON( MotionValues *aMotion, uint *aECG )
-{
-    std::ostringstream Result;
-
-    // Start building the JSON string
-    Result << "{ \"MS\":{ "
-            << "\"AX\":" << aMotion->Accelerometer.X << ","
-            << "\"AY\":" << aMotion->Accelerometer.Y << ","
-            << "\"AZ\":" << aMotion->Accelerometer.Z << ","
-            << "\"GX\":" << aMotion->Gyro.X << ","
-            << "\"GY\":" << aMotion->Gyro.Y << ","
-            << "\"GZ\":" << aMotion->Gyro.Z << ","
-            << "\"Temp\":" << aMotion->Temperature
-            << " }, \"ES\":[";
-
-    // Add ECG values to the JSON string
-    for ( int i = 0; i < ECG_SAMPLE; ++i )
-    {
-        Result << aECG[i];
-        if ( i < (ECG_SAMPLE - 1) ) Result << ",";
-    }
-
-    Result << "]}";
-
-    return Result.str();
-}
-
-
 //- Public Methods ---------------------------------------------------------------------------------
 
-void Messenger::Dispatch( MotionValues *aMotion, uint *aECG )
+void Messenger::DispatchMS( MotionValues *aMotion )
 {
-    const string DATA_RAW = dataJSON( aMotion, aECG );
-    const str DATA = DATA_RAW.c_str();
-
-    Serial.println( DATA );
-
-    #ifdef DEBUG_MESSENGER
-        ESP_LOGI( fTag, "%s", DATA );
-    #endif
+    Serial.print( "{\"MS\":{\"AX\":" );
+    Serial.print( aMotion->Accelerometer.X );
+    Serial.print( ",\"AY\":" );
+    Serial.print( aMotion->Accelerometer.Y );
+    Serial.print( ",\"AZ\":" );
+    Serial.print( aMotion->Accelerometer.Z );
+    Serial.print( ",\"GX\":" );
+    Serial.print( aMotion->Gyro.X );
+    Serial.print( ",\"GY\":" );
+    Serial.print( aMotion->Gyro.Y );
+    Serial.print( ",\"GZ\":" );
+    Serial.print( aMotion->Gyro.Z );
+    Serial.print( ",\"Temp\":" );
+    Serial.print( aMotion->Temperature );
+    Serial.print( "},\"ES\":[" );
 }
+
+void Messenger::DispatchES( uint aES )
+{
+    Serial.print( aES );
+    Serial.print( "," );
+}
+
+void Messenger::DispatchTail( void )
+{
+    Serial.println( "]}" );
+}
+
 
 void Messenger::Task( void )
 {
@@ -70,15 +59,13 @@ void Messenger::Task( void )
                 fMessage = lInputBuffer;
                 lInputBuffer.clear();
 
-                Serial.println( fMessage.c_str() );
+                #ifndef DEBUG_MESSENGER
+                    ESP_LOGI( fTag, "%s", fMessage.c_str() );
+                #endif
             }
             else
             {
                 lInputBuffer += lSingleChar;
-
-                #ifdef DEBUG_MESSENGER
-                    ESP_LOGI( fTag, "%c", lSingleChar );
-                #endif
             }
         }
 
