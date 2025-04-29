@@ -27,7 +27,7 @@ typedef struct {
         int16_t X, Y, Z;
     } Gyro;
 
-    int16_t Temperature;
+    double Temperature;
 } MotionValues;
 
 

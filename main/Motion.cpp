@@ -51,17 +51,17 @@ void MotionSensor::Task( void )
         fValues->Accelerometer.X = Wire.read()<<8 | Wire.read(); // 0x3B and 0x3C
         fValues->Accelerometer.Y = Wire.read()<<8 | Wire.read(); // 0x3D and 0x3E
         fValues->Accelerometer.Z = Wire.read()<<8 | Wire.read(); // 0x3F and 0x40
-        fValues->Temperature = Wire.read()<<8 | Wire.read(); // 0x41 and 0x42
+        fValues->Temperature = ( Wire.read()<<8 | Wire.read() ) / 3765.3; // 0x41 and 0x42 | Celcius
         fValues->Gyro.X = Wire.read()<<8 | Wire.read(); // 0x43 and 0x44
         fValues->Gyro.Y = Wire.read()<<8 | Wire.read(); // 0x45 and 0x46
         fValues->Gyro.Z = Wire.read()<<8 | Wire.read(); // 0x47 and 0x48
 
         #ifdef DEBUG_MOTION
             ESP_LOGI( fTag,
-                "aX = %d | aY = %d | aZ = %d | tmp = %f | gX = %d | gY = %d | gZ = %d", 
-                fValues->Accelerometer.X, fValues->Accelerometer.Y, fValues->Accelerometer.Z, 
-                ( fValues->Temperature / 340.00+36.53 ),
-                fValues->Gyro.X, fValues->Gyro.Y, fValues->Gyro.Z 
+                "aX = %d | aY = %d | aZ = %d | gX = %d | gY = %d | gZ = %d | tmp = %f",
+                fValues->Accelerometer.X, fValues->Accelerometer.Y, fValues->Accelerometer.Z,
+                fValues->Gyro.X, fValues->Gyro.Y, fValues->Gyro.Z,
+                fValues->Temperature
             );
         #endif
     }

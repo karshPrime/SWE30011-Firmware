@@ -33,9 +33,9 @@ void Messenger::DispatchMS( MotionValues *aMotion )
     Serial.print( aMotion->Temperature );
     Serial.print( "}," );
 
-    #ifndef DEBUG_MESSENGER
+    #ifdef DEBUG_MESSENGER
         ESP_LOGI( fTag,
-            "{\"MS\":{\"AX\":%d,\"AY\":%d,\"AZ\":%d,\"GX\":%d,\"GY\":%d,\"GZ\":%d,\"Temp\":%d},",
+            "{\"MS\":{\"AX\":%d,\"AY\":%d,\"AZ\":%d,\"GX\":%d,\"GY\":%d,\"GZ\":%d,\"Temp\":%f},",
             aMotion->Accelerometer.X, aMotion->Accelerometer.Y, aMotion->Accelerometer.Z,
             aMotion->Gyro.X, aMotion->Gyro.Y, aMotion->Gyro.Z,
             aMotion->Temperature
