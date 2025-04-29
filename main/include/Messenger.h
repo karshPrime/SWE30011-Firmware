@@ -32,8 +32,7 @@ class Messenger : Ground
         string Retrieve( void ) const { return fMessage; }
 
         void DispatchMS( MotionValues* );
-        void DispatchES( uint );
-        void DispatchTail( void );
+        void DispatchES( uint, uint );
 
         void Task( void ) override;
 };

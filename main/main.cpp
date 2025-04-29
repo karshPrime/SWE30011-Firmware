@@ -24,11 +24,9 @@ extern "C" void app_main( void )
         for ( int i = 0; i < ECG_SAMPLE; i++ )
         {
             xTaskNotifyGive( ECG.TaskHandler );
-            Connection.DispatchES( ECG.Values() );
+            Connection.DispatchES( ECG.Values(), i );
             delay(1);
         }
-        Connection.DispatchTail();
-
 
         // Recieve Actuator Action & Trigger them ------------
 

@@ -1,5 +1,6 @@
 
 #include "Messenger.h"
+#include "ECG.h"
 
 //- Constructor ------------------------------------------------------------------------------------
 
@@ -30,20 +31,38 @@ void Messenger::DispatchMS( MotionValues *aMotion )
     Serial.print( aMotion->Gyro.Z );
     Serial.print( ",\"Temp\":" );
     Serial.print( aMotion->Temperature );
-    Serial.print( "},\"ES\":[" );
+    Serial.print( "}," );
+
+    #ifndef DEBUG_MESSENGER
+        ESP_LOGI( fTag,
+            "{\"MS\":{\"AX\":%d,\"AY\":%d,\"AZ\":%d,\"GX\":%d,\"GY\":%d,\"GZ\":%d,\"Temp\":%d},",
+            aMotion->Accelerometer.X, aMotion->Accelerometer.Y, aMotion->Accelerometer.Z,
+            aMotion->Gyro.X, aMotion->Gyro.Y, aMotion->Gyro.Z,
+            aMotion->Temperature
+        );
+    #endif
 }
 
-void Messenger::DispatchES( uint aES )
+void Messenger::DispatchES( uint aES, uint aIndex )
 {
-    Serial.print( aES );
-    Serial.print( "," );
-}
+    switch ( aIndex )
+    {
+        case 0:
+            Serial.print("\"ES\":[");
+            Serial.print(aES);
+            Serial.print(",");
+            break;
 
-void Messenger::DispatchTail( void )
-{
-    Serial.println( "]}" );
-}
+        case ECG_SAMPLE - 1:
+            Serial.print(aES);
+            Serial.print("]}\n");
+            break;
 
+        default:
+            Serial.print(aES);
+            Serial.print(",");
+    }
+}
 
 void Messenger::Task( void )
 {
