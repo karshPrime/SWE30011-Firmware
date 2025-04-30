@@ -66,26 +66,15 @@ void Messenger::DispatchES( uint aES, uint aIndex )
 
 void Messenger::Task( void )
 {
-    string lInputBuffer;
-
     while ( true )
     {
         while ( Serial.available() > 0 )
         {
-            char lSingleChar = ( char )Serial.read();
-            if ( lSingleChar == '\n' )
-            {
-                fMessage = lInputBuffer;
-                lInputBuffer.clear();
+            fMessage = Serial.readStringUntil( '\n' );
 
-                #ifndef DEBUG_MESSENGER
-                    ESP_LOGI( fTag, "%s", fMessage.c_str() );
-                #endif
-            }
-            else
-            {
-                lInputBuffer += lSingleChar;
-            }
+            #ifndef DEBUG_MESSENGER
+                ESP_LOGI( fTag, "%s", fMessage.c_str() );
+            #endif
         }
 
         vTaskDelay( 10 / portTICK_PERIOD_MS );

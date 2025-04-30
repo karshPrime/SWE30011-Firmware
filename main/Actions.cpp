@@ -70,24 +70,25 @@ void Actions::beep( AStatus aSpeed )
     }
 }
 
-uint Actions::readJSON( const string &aJSON, const string &aKey )
+uint Actions::readJSON( const String &aJSON, const String &aKey )
 {
-    const string lSearchKey = "\"" + aKey + "\":";
-    const size_t lPosition = aJSON.find( lSearchKey );
+    const String lSearchKey = "\"" + aKey + "\":";
+    const size_t lPosition = aJSON.indexOf( lSearchKey );
 
-    if ( lPosition != string::npos )
+    if ( lPosition != -1 )
     {
-        const size_t lStartIndex = aJSON.find( ':', lPosition ) + 1;
-        size_t lEndIndex = aJSON.find( ',', lStartIndex );
+        const size_t lStartIndex = aJSON.indexOf( ':', lPosition ) + 1;
+        size_t lEndIndex = aJSON.indexOf( ',', lStartIndex );
 
-        if ( lEndIndex == string::npos )
-            lEndIndex = aJSON.find( '}', lStartIndex );
+        if ( lEndIndex == -1 ) // If not found, look for '}'
+            lEndIndex = aJSON.indexOf( '}', lStartIndex );
 
-        const uint Result = std::stoi( aJSON.substr( lStartIndex, lEndIndex - lStartIndex ));
+        String valueString = aJSON.substring( lStartIndex, lEndIndex );
+        const uint Result = valueString.toInt();
 
-    #ifdef DEBUG_ACTIONS
-        ESP_LOGI( "Parsed", "%s as %d", aJSON.c_str(), Result );
-    #endif
+        #ifdef DEBUG_ACTIONS
+            ESP_LOGI( fTag, "%s as %d", aJSON.c_str(), Result );
+        #endif
 
         return Result;
     }
@@ -98,7 +99,7 @@ uint Actions::readJSON( const string &aJSON, const string &aKey )
 
 //- Public Methods ---------------------------------------------------------------------------------
 
-void Actions::Parse( string aData )
+void Actions::Parse( String aData )
 {
     heartRate( readJSON( aData, "AHR" ) );
 

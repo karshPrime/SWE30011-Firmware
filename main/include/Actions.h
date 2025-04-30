@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include <string>
 #include "Adafruit_NeoPixel.h"
 #include "Ground.h"
 
@@ -14,13 +13,11 @@
 
 //- Typedefs ---------------------------------------------------------------------------------------
 
-using std::string;
-typedef unsigned int uint;
 typedef enum { STOP, START, UNCHANGED, BEEP, BEEP_FAST, BEEP_SLOW } AStatus;
 
 typedef struct {
     uint    Pin;
-    string  Key;
+    String  Key;
     AStatus Status;
     bool    State;
 } Actuator;
@@ -36,12 +33,12 @@ class Actions: public Ground {
 
         void beep( AStatus );
         void heartRate( uint );
-        uint readJSON( const string&, const string& );
+        uint readJSON( const String&, const String& );
 
     public:
         Actions( void );
         ~Actions( void ) override;
 
-        void Parse( string );
+        void Parse( String );
         void Task( void ) override;
 };

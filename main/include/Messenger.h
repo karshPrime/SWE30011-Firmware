@@ -1,14 +1,11 @@
 
 #pragma once
 
-#include <string>
 #include <sstream>
 #include <iomanip>
 
 #include "Ground.h"
 #include "Motion.h"
-
-using std::string;
 
 //- Configs ----------------------------------------------------------------------------------------
 
@@ -24,12 +21,12 @@ using std::string;
 class Messenger : Ground
 {
     private:
-        string fMessage;
+        String fMessage;
 
     public:
         Messenger( void );
 
-        string Retrieve( void ) const { return fMessage; }
+        String Retrieve( void ) const { return fMessage; }
 
         void DispatchMS( MotionValues* );
         void DispatchES( uint, uint );
