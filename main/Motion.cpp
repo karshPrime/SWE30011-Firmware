@@ -51,7 +51,7 @@ void MotionSensor::Task( void )
         fValues->Accelerometer.X = Wire.read()<<8 | Wire.read(); // 0x3B and 0x3C
         fValues->Accelerometer.Y = Wire.read()<<8 | Wire.read(); // 0x3D and 0x3E
         fValues->Accelerometer.Z = Wire.read()<<8 | Wire.read(); // 0x3F and 0x40
-        fValues->Temperature = ( Wire.read()<<8 | Wire.read() ) / 3765.3; // 0x41 and 0x42 | Celcius
+        fValues->Temperature = Wire.read()<<8 | Wire.read(); // 0x41 and 0x42
         fValues->Gyro.X = Wire.read()<<8 | Wire.read(); // 0x43 and 0x44
         fValues->Gyro.Y = Wire.read()<<8 | Wire.read(); // 0x45 and 0x46
         fValues->Gyro.Z = Wire.read()<<8 | Wire.read(); // 0x47 and 0x48

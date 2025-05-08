@@ -40,14 +40,11 @@ Actions::~Actions( void )
 
 //- Private Methods --------------------------------------------------------------------------------
 
-void Actions::heartRate( uint aAverageRate )
+void Actions::heartRate( uint *aColours )
 {
-    if ( aAverageRate == 10 )
-        fRGBStrip.setPixelColor( 0, fRGBStrip.Color(255, 0, 0) ); // Red
-    else if ( aAverageRate == 20 )
-        fRGBStrip.setPixelColor( 0, fRGBStrip.Color(0, 255, 0) ); // Green
-    else
-        fRGBStrip.setPixelColor( 0, fRGBStrip.Color(0, 0, 255) ); // Blue
+    fRGBStrip.setPixelColor( 0,
+        fRGBStrip.Color( aColours[0], aColours[1], aColours[2] )
+    );
 
     fRGBStrip.show();
 }
@@ -101,7 +98,12 @@ uint Actions::readJSON( const String &aJSON, const String &aKey )
 
 void Actions::Parse( String aData )
 {
-    heartRate( readJSON( aData, "AHR" ) );
+    uint lHeartRGB[3] = {
+        readJSON( aData, "HRR" ), // red
+        readJSON( aData, "HRG" ), // green
+        readJSON( aData, "HRB" )  // blue
+    };
+    heartRate( lHeartRGB );
 
     for ( size_t i = 0; i < fCount; ++i )
     {

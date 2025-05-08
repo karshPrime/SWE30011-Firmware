@@ -32,7 +32,7 @@ class Actions: public Ground {
         Adafruit_NeoPixel fRGBStrip;
 
         void beep( AStatus );
-        void heartRate( uint );
+        void heartRate( uint * );
         uint readJSON( const String&, const String& );
 
     public:

@@ -35,7 +35,7 @@ void Messenger::DispatchMS( MotionValues *aMotion )
 
     #ifdef DEBUG_MESSENGER
         ESP_LOGI( fTag,
-            "{\"MS\":{\"AX\":%d,\"AY\":%d,\"AZ\":%d,\"GX\":%d,\"GY\":%d,\"GZ\":%d,\"Temp\":%f},",
+            "{\"MS\":{\"AX\":%d,\"AY\":%d,\"AZ\":%d,\"GX\":%d,\"GY\":%d,\"GZ\":%d,\"Temp\":%d},",
             aMotion->Accelerometer.X, aMotion->Accelerometer.Y, aMotion->Accelerometer.Z,
             aMotion->Gyro.X, aMotion->Gyro.Y, aMotion->Gyro.Z,
             aMotion->Temperature
@@ -72,7 +72,7 @@ void Messenger::Task( void )
         {
             fMessage = Serial.readStringUntil( '\n' );
 
-            #ifndef DEBUG_MESSENGER
+            #ifdef DEBUG_MESSENGER
                 ESP_LOGI( fTag, "%s", fMessage.c_str() );
             #endif
         }
