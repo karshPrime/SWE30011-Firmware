@@ -19,7 +19,11 @@
 
 //- Debug Print ------------------------------------------------------------------------------------
 
-// #define DEBUG_ECG
-// #define DEBUG_MOTION
-// #define DEBUG_ACTIONS
-// #define DEBUG_MESSENGER
+#define NDEBUG
+
+#ifndef NDEBUG
+    // #define DEBUG_ECG
+    // #define DEBUG_MOTION
+    // #define DEBUG_ACTIONS
+    #define DEBUG_MESSENGER
+#endif
